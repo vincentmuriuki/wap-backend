@@ -4,6 +4,9 @@ import mongoose from 'mongoose';
 import Pusher from 'pusher';
 import Messages from './dbMessages.js';
 import cors from 'cors';
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express();
 
@@ -29,17 +32,17 @@ mongoose.connect(conn_url, {
 
 // Pusher config
 const pusher = new Pusher({
-  appId: '1073884',
-  key: '741a060e76c7a69b09c9',
-  secret: 'f09c585aa25e9d487030',
-  cluster: 'ap2',
+  appId: process.env.APP_ID,
+  key: process.env.KEY,
+  secret: process.env.SECRET,
+  cluster: process.env.CLUSTER,
   encrypted: true,
 });
 
 const db = mongoose.connection;
 
 db.once('open', () => {
-  console.log('Db connceted');
+  console.log('Db connected');
 
   const msgCollection = db.collection('messages');
   const changeStream = msgCollection.watch();
